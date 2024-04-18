@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Game.h"
+#include "utils.h"
+#include "SVGParser.h"
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -14,15 +16,25 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	m_pPlayer = new Character(Point2f(50.f, 100.f));
+	m_pCamera = new Camera(GetViewPort().width, GetViewPort().height);
+	m_pMap = new Texture("level.png");
+	SVGParser::GetVerticesFromSvgFile("level.svg", m_Landscape);
 }
 
 void Game::Cleanup( )
 {
+	delete m_pPlayer;
+	m_pPlayer = nullptr;
 }
 
 void Game::Update( float elapsedSec )
 {
+	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
+
+	m_pPlayer->Update(elapsedSec,m_Landscape,m_Platforms);
+	m_pPlayer->HandleMovement(elapsedSec, pStates);
+
 	// Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	//if ( pStates[SDL_SCANCODE_RIGHT] )
@@ -38,6 +50,10 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	m_pCamera->Aim(3000, 600, m_pPlayer->GetPos());
+	m_pMap->Draw();
+	m_pPlayer->Draw();
+	m_pCamera->Reset();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -47,6 +63,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
+	m_pPlayer->OnKeyUpEvent(e);
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
 	//switch ( e.keysym.sym )
 	//{
