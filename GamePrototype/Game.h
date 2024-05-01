@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Character.h"
 #include "Texture.h"
+#include "SoundEffect.h"
 class Game : public BaseGame
 {
 public:
@@ -28,12 +29,22 @@ private:
 	Character* m_pPlayer;
 	Camera* m_pCamera;
 	Texture* m_pMap;
+	Texture* m_pBadGuy;
+	Texture* m_pBadGuyEnd;
+	Texture* m_pPotion;
+	Rectf m_PotionRect;
 	std::vector<std::vector<Point2f>> m_Landscape;
-	std::vector<std::vector<Point2f>> m_Platforms;
-
-
+	int m_LevelNr;
+	int m_CurrLevel;
+	float m_BadGuySeconds;
+	Point2f m_BadGuyPos;
+	SoundEffect* m_Yay;
+	SoundEffect* m_Drinking;
+	bool m_CanDrink{ true };
 	// FUNCTIONS
 	void Initialize();
 	void Cleanup( );
 	void ClearBackground( ) const;
+
+	void ResetAll();
 };
