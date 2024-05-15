@@ -29,6 +29,7 @@ private:
 	float m_JumpTime;
 	float m_TimeInAir;
 	float m_DeadSeconds;
+	float m_SpeedSeconds;
 	bool m_CanJump;
 	bool m_IsOnGround;
 	bool m_IsDead;
@@ -46,12 +47,13 @@ public:
 	void Draw() const;
 	void WalkRight(float elapsedSec, const Uint8* pStates) ;
 	void WalkLeft(float elapsedSec, const Uint8* pStates) ;
-	void HandleMovement(float elapsedSec, const Uint8* pStates) ;
+	void HandleMovement(float elapsedSec, const Uint8* pStates, bool& finished) ;
 	void OnKeyUpEvent(const SDL_KeyboardEvent& e);
 	void Animate(float elapsedSec);
 	void SetPos(const Point2f& pos);
 	void SetDead(const bool& isDead);
 	void Reset();
+	void AddSpeedSec(float sec);
 	float GetDeadSec();
 	Rectf GetCurrFrameRect() const;
 	Point2f GetPos() const;

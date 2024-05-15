@@ -4,6 +4,7 @@
 #include "Character.h"
 #include "Texture.h"
 #include "SoundEffect.h"
+#include "PowerUp.h"
 class Game : public BaseGame
 {
 public:
@@ -32,8 +33,10 @@ private:
 	Texture* m_pBadGuy;
 	Texture* m_pBadGuyEnd;
 	Texture* m_pPotion;
+	Texture* m_pTimerString;
 	Rectf m_PotionRect;
 	std::vector<std::vector<Point2f>> m_Landscape;
+	std::vector<PowerUp*> m_pPowerUps;
 	int m_LevelNr;
 	int m_CurrLevel;
 	float m_BadGuySeconds;
@@ -41,6 +44,9 @@ private:
 	SoundEffect* m_Yay;
 	SoundEffect* m_Drinking;
 	bool m_CanDrink{ true };
+	float m_Timer;
+	bool m_Finished{ true };
+	bool m_Results{ false };
 	// FUNCTIONS
 	void Initialize();
 	void Cleanup( );

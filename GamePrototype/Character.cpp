@@ -7,15 +7,16 @@ Character::Character(const Point2f& startingPos)
 	,m_Velocity{}
 	,m_WalkingState{WalkingState::none}
 	,m_LookingState{ LookingState::right }
-	, m_JumpTime{ 0.4f }
+	,m_JumpTime{ 0.4f }
 	,m_TimeInAir{0}
-	, m_CanJump{ 1 }
+	,m_CanJump{ 1 }
 	,m_IsOnGround{  }
 	,m_FrameRect{ Rectf(2, 341, 178, 336) }
 	,m_IsDead{ false }
 	,m_CanPlayClang{true}
 	,m_CanPlaySad{ true }
 	,m_DeadSeconds{ 0 }
+	,m_SpeedSeconds{0}
 {
 	m_pSpritesheet = new Texture("character.png");
 	m_Bounds = Rectf(0, 0, GetCurrFrameRect().width/2, GetCurrFrameRect().height/2);
@@ -60,8 +61,19 @@ void Character::Update(float elapsedSec, const std::vector<std::vector<Point2f>>
 
 	utils::HitInfo hitInfo{};
 
-	m_Pos.x += m_Velocity.x * elapsedSec;
-	m_Pos.y += m_Velocity.y * elapsedSec;
+	if (m_SpeedSeconds > 0)
+	{
+		m_Pos.x += m_Velocity.x * elapsedSec * 2;
+		m_Pos.y += m_Velocity.y * elapsedSec;
+		m_SpeedSeconds -= elapsedSec;
+
+	}
+	else
+	{
+		m_SpeedSeconds = 0;
+		m_Pos.x += m_Velocity.x * elapsedSec;
+		m_Pos.y += m_Velocity.y * elapsedSec;
+	}
 	if (m_Velocity.x < 1.f && m_Velocity.x >-1.f) m_Velocity.x = 0;
 	m_Bounds = Rectf(m_Pos.x, m_Pos.y, GetCurrFrameRect().width / 2, GetCurrFrameRect().height / 2);
 
@@ -181,7 +193,7 @@ void Character::WalkLeft(float elapsedSec, const Uint8* pStates)
 }
 
 
-void Character::HandleMovement(float elapsedSec, const Uint8* pStates)
+void Character::HandleMovement(float elapsedSec, const Uint8* pStates, bool& finished)
 {
 	// Aparte functions voor elke movement method want ze worden lang
 	if (!m_IsDead)
@@ -194,10 +206,15 @@ void Character::HandleMovement(float elapsedSec, const Uint8* pStates)
 		if (pStates[SDL_SCANCODE_RIGHT])
 		{
 			WalkRight(elapsedSec, pStates);
+			finished = false;
+
+			
 		}
 		else if (pStates[SDL_SCANCODE_LEFT])
 		{
 			WalkLeft(elapsedSec, pStates);
+			finished = false;
+
 		}
 
 
@@ -216,6 +233,7 @@ void Character::HandleMovement(float elapsedSec, const Uint8* pStates)
 				m_TimeInAir += elapsedSec;
 			}
 
+			finished = false;
 
 
 		}
@@ -297,6 +315,13 @@ void Character::Reset()
 	m_DeadSeconds = 0;
 	m_CanPlayClang = true;
 	m_CanPlaySad = true;
+	m_Velocity = Vector2f(0, 0);
+	m_SpeedSeconds = 0;
+}
+
+void Character::AddSpeedSec(float sec)
+{
+	m_SpeedSeconds += sec;
 }
 
 float Character::GetDeadSec()
