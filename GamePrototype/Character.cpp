@@ -33,11 +33,15 @@ Character::~Character()
 	m_pJumpEffect = nullptr; 
 	delete m_Sad;
 	delete m_MetalClang;
+	delete m_pTimerString;
 }
 
 
 void Character::Update(float elapsedSec, const std::vector<std::vector<Point2f>>& landscape, const Texture* map)
 {
+	std::string timeString{ "PowerUp time left: " };
+	timeString += std::to_string(m_SpeedSeconds);
+	m_pTimerString = new Texture(timeString, "COMICSANS.TTF", 30, Color4f(0.f, 0.f, 0.f, 1.f));
 
 	const float gravity{ -7.f };
 	const float friction{ -1.4f };
@@ -170,6 +174,17 @@ void Character::Draw() const
 
 	Rectf drawRect{ m_Pos.x,m_Pos.y, m_FrameRect.width/2,m_FrameRect.height/2};
 	m_pSpritesheet->Draw(drawRect, m_FrameRect);
+
+	
+
+}
+
+void Character::DrawNoCam() const
+{
+	if (m_SpeedSeconds > 0)
+	{
+		m_pTimerString->Draw(Point2f(0, 0));
+	}
 }
 
 void Character::WalkRight(float elapsedSec, const Uint8* pStates)

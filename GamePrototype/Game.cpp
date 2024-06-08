@@ -35,6 +35,9 @@ void Game::Initialize( )
 	m_pPowerUps.push_back(new PowerUp(Point2f(rand() % 4000 + 100.f, rand() % 500 + 100.f)));
 	m_pPowerUps.push_back(new PowerUp(Point2f(rand() % 4000 + 100.f, rand() % 500 + 100.f)));
 	m_pPowerUps.push_back(new PowerUp(Point2f(rand() % 4000 + 100.f, rand() % 500 + 100.f)));
+	/*m_pPowerUps.push_back(new PowerUp(Point2f(100, 200)));
+	m_pPowerUps.push_back(new PowerUp(Point2f(100, 200)));
+	m_pPowerUps.push_back(new PowerUp(Point2f(100, 200)));*/
 }
 
 void Game::Cleanup( )
@@ -154,6 +157,7 @@ void Game::Draw( ) const
 		m_pCamera->Reset();
 		
 		m_pTimerString->Draw(Point2f(0, GetViewPort().height - m_pTimerString->GetHeight()));
+		m_pPlayer->DrawNoCam();
 
 	}
 	else m_pMap->Draw();
@@ -256,5 +260,8 @@ void Game::ResetAll()
 	m_pPowerUps.push_back(new PowerUp(Point2f(rand() % 4000 + 100.f, rand() % 500 + 100.f)));
 	m_pPowerUps.push_back(new PowerUp(Point2f(rand() % 4000 + 100.f, rand() % 500 + 100.f)));
 	m_pPowerUps.push_back(new PowerUp(Point2f(rand() % 4000 + 100.f, rand() % 500 + 100.f)));
+	/*m_pPowerUps.push_back(new PowerUp(Point2f(100, 200)));
+	m_pPowerUps.push_back(new PowerUp(Point2f(100, 200)));
+	m_pPowerUps.push_back(new PowerUp(Point2f(100, 200)));*/
 
 }

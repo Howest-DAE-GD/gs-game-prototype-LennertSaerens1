@@ -36,6 +36,8 @@ private:
 	bool m_CanPlayClang;
 	bool m_CanPlaySad;
 	Rectf m_FrameRect;
+	Texture* m_pTimerString;
+
 
 
 
@@ -45,6 +47,7 @@ public:
 	~Character();
 	void Update(float elapsedSec, const std::vector<std::vector<Point2f>>& landscape, const Texture* map);
 	void Draw() const;
+	void DrawNoCam() const;
 	void WalkRight(float elapsedSec, const Uint8* pStates) ;
 	void WalkLeft(float elapsedSec, const Uint8* pStates) ;
 	void HandleMovement(float elapsedSec, const Uint8* pStates, bool& finished) ;
